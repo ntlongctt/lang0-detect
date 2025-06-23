@@ -8,7 +8,8 @@ interface ApiKeySetupProps {
 }
 
 export default function ApiKeySetup({ onComplete }: ApiKeySetupProps) {
-  const { setApiKey, clearApiKey, isApiKeyValid, apiKey } = useApiKey();
+  const { setApiKey, clearApiKey, isApiKeyValid, apiKey, isLoaded } =
+    useApiKey();
   const [inputKey, setInputKey] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [error, setError] = useState("");
@@ -42,6 +43,20 @@ export default function ApiKeySetup({ onComplete }: ApiKeySetupProps) {
     setInputKey("");
     setError("");
   };
+
+  // Show loading state while checking sessionStorage to prevent hydration mismatch
+  if (!isLoaded) {
+    return (
+      <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <div className="flex items-center space-x-3">
+          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600" />
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            Loading...
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   if (isApiKeyValid) {
     return (

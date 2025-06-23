@@ -13,6 +13,7 @@ interface ApiKeyContextType {
   setApiKey: (key: string) => void;
   clearApiKey: () => void;
   isApiKeyValid: boolean;
+  isLoaded: boolean;
 }
 
 const ApiKeyContext = createContext<ApiKeyContextType | undefined>(undefined);
@@ -27,6 +28,7 @@ const validateApiKey = (key: string): boolean => {
 export function ApiKeyProvider({ children }: { children: ReactNode }) {
   const [apiKey, setApiKeyState] = useState<string | null>(null);
   const [isApiKeyValid, setIsApiKeyValid] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Load API key from sessionStorage on mount
   useEffect(() => {
@@ -36,6 +38,7 @@ export function ApiKeyProvider({ children }: { children: ReactNode }) {
         setApiKeyState(storedKey);
         setIsApiKeyValid(validateApiKey(storedKey));
       }
+      setIsLoaded(true);
     }
   }, []);
 
@@ -65,7 +68,7 @@ export function ApiKeyProvider({ children }: { children: ReactNode }) {
 
   return (
     <ApiKeyContext.Provider
-      value={{ apiKey, setApiKey, clearApiKey, isApiKeyValid }}
+      value={{ apiKey, setApiKey, clearApiKey, isApiKeyValid, isLoaded }}
     >
       {children}
     </ApiKeyContext.Provider>

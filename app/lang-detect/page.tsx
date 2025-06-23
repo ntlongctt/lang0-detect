@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { detectLanguage, type LanguageDetectionResult } from "./actions";
 import { ApiKeyProvider, useApiKey } from "./context/ApiKeyContext";
 import ApiKeySetup from "./components/ApiKeySetup";
+import TokenUsageDisplay from "./components/TokenUsageDisplay";
 
 function LanguageDetectionContent() {
   const { apiKey, isApiKeyValid } = useApiKey();
@@ -190,6 +191,14 @@ function LanguageDetectionContent() {
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Detection Results
             </h2>
+
+            {/* Token Usage & Cost Display */}
+            {result.tokenUsage && result.costEstimation && (
+              <TokenUsageDisplay
+                tokenUsage={result.tokenUsage}
+                costEstimation={result.costEstimation}
+              />
+            )}
 
             {/* Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

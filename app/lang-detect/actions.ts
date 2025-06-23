@@ -1,6 +1,12 @@
 "use server";
 
 import OpenAI from "openai";
+import {
+	countTokens,
+	calculateCost,
+	type TokenUsage,
+	type CostEstimation,
+} from "./utils/tokenUtils";
 
 export interface LanguageDetectionResult {
 	languages: Array<{
@@ -11,6 +17,8 @@ export interface LanguageDetectionResult {
 	}>;
 	primary_language: string;
 	is_multilingual: boolean;
+	tokenUsage?: TokenUsage;
+	costEstimation?: CostEstimation;
 }
 
 export async function detectLanguage(
@@ -71,6 +79,10 @@ export async function detectLanguage(
 		console.log("📤 Sending request to OpenAI...");
 		console.log("📝 Text length:", text.length);
 		console.log("📝 Text preview:", `${text.substring(0, 100)}...`);
+
+		// Count input tokens before sending request
+		const inputTokens = countTokens(text);
+		console.log("🔢 Input tokens:", inputTokens);
 
 		const response = await openai.responses.create({
 			prompt: {
@@ -161,9 +173,28 @@ export async function detectLanguage(
 						parsedResult.primary_language !== undefined &&
 						parsedResult.is_multilingual !== undefined
 					) {
+						// Count output tokens and calculate costs
+						const outputTokens = countTokens(textContent);
+						const totalTokens = inputTokens + outputTokens;
+
+						const tokenUsage: TokenUsage = {
+							inputTokens,
+							outputTokens,
+							totalTokens,
+						};
+
+						const costEstimation = calculateCost(tokenUsage, "gpt-4.1-nano");
+
+						console.log("💰 Token usage:", tokenUsage);
+						console.log("💰 Cost estimation:", costEstimation);
+
 						return {
 							success: true,
-							data: parsedResult,
+							data: {
+								...parsedResult,
+								tokenUsage,
+								costEstimation,
+							},
 						};
 					}
 				} catch (parseError) {
