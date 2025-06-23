@@ -19,6 +19,11 @@ const ApiKeyContext = createContext<ApiKeyContextType | undefined>(undefined);
 
 const API_KEY_STORAGE_KEY = "lang_detect_openai_key";
 
+const validateApiKey = (key: string): boolean => {
+  // Basic validation for OpenAI API key format
+  return key.startsWith("sk-") && key.length > 20;
+};
+
 export function ApiKeyProvider({ children }: { children: ReactNode }) {
   const [apiKey, setApiKeyState] = useState<string | null>(null);
   const [isApiKeyValid, setIsApiKeyValid] = useState(false);
@@ -33,11 +38,6 @@ export function ApiKeyProvider({ children }: { children: ReactNode }) {
       }
     }
   }, []);
-
-  const validateApiKey = (key: string): boolean => {
-    // Basic validation for OpenAI API key format
-    return key.startsWith("sk-") && key.length > 20;
-  };
 
   const setApiKey = (key: string) => {
     const trimmedKey = key.trim();

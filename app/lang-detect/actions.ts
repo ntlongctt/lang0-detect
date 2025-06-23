@@ -141,7 +141,9 @@ export async function detectLanguage(
 			}
 
 			if (textContent) {
-				console.log("✅ Found text content, parsing JSON...");
+				if (process.env.NODE_ENV === "development") {
+					console.log("✅ Found text content, parsing JSON...");
+				}
 				console.log(
 					"📄 Raw response text:",
 					`${textContent.substring(0, 200)}...`,
