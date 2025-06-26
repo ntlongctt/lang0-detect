@@ -15,14 +15,24 @@ export default function Home() {
             Lang0 Detect
           </span>
         </div>
-        <Link
-          href="/lang-detect"
-          className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          tabIndex={0}
-          aria-label="Go to language detection tool"
-        >
-          Try Now
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/system-status"
+            className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg px-2 py-1"
+            tabIndex={0}
+            aria-label="View system status"
+          >
+            System Status
+          </Link>
+          <Link
+            href="/lang-detect"
+            className="rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            tabIndex={0}
+            aria-label="Go to language detection tool"
+          >
+            Try Now
+          </Link>
+        </div>
       </nav>
 
       {/* Hero Section */}
